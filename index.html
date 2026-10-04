@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prototipo Funcional - Junín Conecta</title>
+    <title>Junín Conecta - TV y Entretenimiento</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <style>
       body {
@@ -126,9 +126,10 @@
         overflow: hidden;
         position: relative;
       }
-      #twitch-embed {
+      #videoPlayer {
         width: 100%;
         height: 100%;
+        background: #000;
       }
       .channels-list {
         background: #12131a;
@@ -172,52 +173,28 @@
       
       <!-- Sección Inicio -->
       <div id="home" class="section active">
-        <h1>Bienvenido al Prototipo</h1>
-        <p>Seleccioná una opción en el menú de la izquierda para probar la sección de TV o la edición de tu perfil.</p>
+        <h1>Bienvenido a Junín Conecta</h1>
+        <p>Seleccioná una opción en el menú de la izquierda para ver los canales o editar tu perfil.</p>
       </div>
 
       <!-- Sección TV / Canales -->
       <div id="tv" class="section">
-        <h2>Canales Online</h2>
+        <h2>Canales Online (Estables)</h2>
         <div class="tv-grid">
           <div class="video-box" id="player-view">
-            <div id="twitch-embed"></div>
-            <div id="placeholder-text" style="position: absolute;">Seleccioná un canal para reproducir</div>
+            <!-- Reproductor HTML5 nativo para streams directos -->
+            <video id="videoPlayer" controls autoplay>
+              Tu navegador no soporta la reproducción de video.
+            </video>
+            <div id="placeholder-text" style="position: absolute; pointer-events: none;">Seleccioná un canal para reproducir</div>
           </div>
           <div class="channels-list" id="channelList">
-            <!-- Lista completa de canales -->
-     <div class="channel-item" data-channel="monstercat" onclick="playChannel('monstercat', 'Monstercat Música')">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/f4/Las_estrellas_2017.jpg" alt="Los Simpson" />
-              <span>Los Simpson</span>
+            <!-- Lista de ejemplo con video de prueba estable -->
+            <div class="channel-item" onclick="playStream('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'Big Buck Bunny')">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.jpg" alt="Prueba" />
+              <span>Canal de Prueba (Video HD)</span>
             </div>
-            <div class="channel-item" data-channel="Meica05" onclick="playChannel('Meica05', 'sepebrenda')">
-              <img src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg" alt="sepebrenda" />
-              <span>sepebrenda</span>
-            </div>
-            <div class="channel-item" data-channel="hecatonquiro18" onclick="playChannel('hecatonquiro18', 'Malcolm Channel 1')">
-              <img src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg" alt="Malcolm" />
-              <span>Malcolm Channel 1</span>
-            </div>
-            <div class="channel-item" data-channel="televisionmxhd" onclick="playChannel('televisionmxhd', 'Las Estrellas')">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/f4/Las_estrellas_2017.jpg" alt="Las Estrellas" />
-              <span>Las Estrellas</span>
-            </div>
-            <div class="channel-item" data-channel="chavo8tv" onclick="playChannel('chavo8tv', 'Chavo Channel')">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Chapul%C3%ADn_Colorado_logo.svg/1024px-El_Chapul%C3%ADn_Colorado_logo.svg.png" alt="Chavo" />
-              <span>Chavo Channel</span>
-            </div>
-            <div class="channel-item" data-channel="chapulincoloradotv" onclick="playChannel('chapulincoloradotv', 'Chapulin Channel')">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Chapul%C3%ADn_Colorado_logo.svg/1024px-El_Chapul%C3%ADn_Colorado_logo.svg.png" alt="Chapulin" />
-              <span>Chapulin Channel</span>
-            </div>
-            <div class="channel-item" data-channel="estebanssj111" onclick="playChannel('estebanssj111', 'Bob Esponja')">
-              <img src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg" alt="Bob Esponja" />
-              <span>Bob Esponja</span>
-            </div>
-            <div class="channel-item" data-channel="dragonballhd1244" onclick="playChannel('dragonballhd1244', 'Dragon Ball Super')">
-              <img src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg" alt="Dragon Ball" />
-              <span>Dragon Ball Super</span>
-            </div>
+            <!-- Acá podés agregar en el futuro más enlaces directos o streams M3U8 -->
           </div>
         </div>
       </div>
@@ -248,8 +225,6 @@
 
     </main>
 
-    <!-- Script oficial de Twitch -->
-    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
       // Cambio de pestañas fluido
       function switchSection(sectionId, event) {
@@ -260,27 +235,16 @@
         event.currentTarget.classList.add('active');
       }
 
-      // Reproductor oficial de Twitch adaptado
-      let player = null;
-      function playChannel(channelName, displayName) {
+      // Reproductor de video directo
+      function playStream(videoUrl, displayName) {
         let placeholder = document.getElementById('placeholder-text');
         if (placeholder) {
           placeholder.style.display = 'none';
         }
-        
-        // Limpiamos el contenedor por si ya había un reproductor anterior
-        document.getElementById('twitch-embed').innerHTML = "";
-
-        // Detectar el host actual de forma dinámica para evitar bloqueos de parent
-        let currentHost = window.location.hostname || "localhost";
-        if (currentHost === "") currentHost = "localhost";
-
-        player = new Twitch.Player("twitch-embed", {
-          channel: channelName,
-          width: "100%",
-          height: "100%",
-          parent: [currentHost, "127.0.0.1", "localhost"]
-        });
+        let player = document.getElementById('videoPlayer');
+        player.src = videoUrl;
+        player.load();
+        player.play().catch(e => console.log("Reproducción automática bloqueada por el navegador:", e));
       }
 
       // Lógica de Perfil y LocalStorage
