@@ -190,10 +190,10 @@
             <div id="placeholder-text" style="position: absolute; pointer-events: none;">Seleccioná un canal para reproducir</div>
           </div>
           <div class="channels-list" id="channelList">
-            <!-- Canal de prueba estable -->
-            <div class="channel-item" onclick="playStream('https://nasa-i.akamaihd.net/hls/live/253565/NASA-TV-Public/index.master.m3u8', 'NASA TV')">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.jpg" alt="Prueba" />
-              <span>Canal de Prueba (Video HD)</span>
+            <!-- Canal de prueba seguro HTTPS con video de Wikimedia -->
+            <div class="channel-item" onclick="playStream('https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f1/Sintel_movie_4K.webm/Sintel_movie_4K.webm.480p.webm', 'Sintel HD')">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Sintel_movie_4K.webm/snapshot-Sintel_movie_4K.webm-00005.jpg" alt="Sintel" />
+              <span>Canal de Prueba (Sintel HD)</span>
             </div>
           </div>
         </div>
@@ -235,7 +235,7 @@
         event.currentTarget.classList.add('active');
       }
 
-      // Reproductor de video directo controlado
+      // Reproductor de video directo controlado con HTTPS
       function playStream(videoUrl, displayName) {
         let placeholder = document.getElementById('placeholder-text');
         if (placeholder) {
