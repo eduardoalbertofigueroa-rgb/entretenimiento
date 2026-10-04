@@ -87,7 +87,6 @@
         color: #888;
         cursor: not-allowed;
       }
-      /* Selector de imágenes oculto por defecto */
       #imageSelection {
         display: none;
         margin-top: 15px;
@@ -121,9 +120,6 @@
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        font-size: 18px;
-        color: #aaa;
-        overflow: hidden;
         position: relative;
       }
       #videoPlayer {
@@ -182,18 +178,17 @@
       <div id="tv" class="section">
         <h2>Canales Online (Estables)</h2>
         <div class="tv-grid">
-          <div class="video-box" id="player-view">
-            <!-- Reproductor HTML5 nativo con controles -->
-            <video id="videoPlayer" controls>
+          <div class="video-box">
+            <!-- El video ya viene precargado en la etiqueta para evitar bloqueos del navegador -->
+            <video id="videoPlayer" controls preload="auto">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
               Tu navegador no soporta la reproducción de video.
             </video>
-            <div id="placeholder-text" style="position: absolute; pointer-events: none;">Seleccioná un canal para reproducir</div>
           </div>
-          <div class="channels-list" id="channelList">
-            <!-- Canal de prueba MP4 directo -->
-            <div class="channel-item" onclick="playStream('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4', 'Tears of Steel HD')">
+          <div class="channels-list">
+            <div class="channel-item">
               <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=100" alt="Test" />
-              <span>Canal de Prueba (MP4 Directo)</span>
+              <span>Canal Principal (Tears of Steel)</span>
             </div>
           </div>
         </div>
@@ -233,26 +228,6 @@
         
         document.getElementById(sectionId).classList.add('active');
         event.currentTarget.classList.add('active');
-      }
-
-      // Reproductor limpio para MP4
-      function playStream(videoUrl, displayName) {
-        let placeholder = document.getElementById('placeholder-text');
-        if (placeholder) {
-          placeholder.style.display = 'none';
-        }
-        let player = document.getElementById('videoPlayer');
-        
-        player.pause();
-        player.src = videoUrl;
-        player.muted = true;
-        player.load();
-        
-        player.play().then(() => {
-          console.log("Reproduciendo con éxito");
-        }).catch(error => {
-          console.log("Requiere interacción manual en controles: ", error);
-        });
       }
 
       // Lógica de Perfil y LocalStorage
