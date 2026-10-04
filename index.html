@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -130,6 +131,7 @@
         width: 100%;
         height: 100%;
         background: #000;
+        object-fit: contain;
       }
       .channels-list {
         background: #12131a;
@@ -182,14 +184,14 @@
         <h2>Canales Online (Estables)</h2>
         <div class="tv-grid">
           <div class="video-box" id="player-view">
-            <!-- Reproductor HTML5 nativo para streams directos -->
-            <video id="videoPlayer" controls autoplay>
+            <!-- Reproductor HTML5 nativo con controles visibles -->
+            <video id="videoPlayer" controls>
               Tu navegador no soporta la reproducción de video.
             </video>
             <div id="placeholder-text" style="position: absolute; pointer-events: none;">Seleccioná un canal para reproducir</div>
           </div>
           <div class="channels-list" id="channelList">
-            <!-- Lista de ejemplo con video de prueba estable -->
+            <!-- Canal de prueba estable -->
             <div class="channel-item" onclick="playStream('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'Big Buck Bunny')">
               <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.jpg" alt="Prueba" />
               <span>Canal de Prueba (Video HD)</span>
@@ -234,25 +236,18 @@
         event.currentTarget.classList.add('active');
       }
 
-      // Reproductor de video directo con arranque forzado
+      // Reproductor de video directo controlado
       function playStream(videoUrl, displayName) {
         let placeholder = document.getElementById('placeholder-text');
         if (placeholder) {
           placeholder.style.display = 'none';
         }
         let player = document.getElementById('videoPlayer');
-        player.pause();
         player.src = videoUrl;
         player.load();
-        
-        let playPromise = player.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.log("Autoplay bloqueado, habilitando controles manuales.");
-            player.muted = true;
-            player.play();
-          });
-        }
+        player.play().catch(error => {
+          console.log("Reproducción pausada por seguridad del navegador. Usar controles manuales.");
+        });
       }
 
       // Lógica de Perfil y LocalStorage
