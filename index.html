@@ -194,7 +194,6 @@
               <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.jpg" alt="Prueba" />
               <span>Canal de Prueba (Video HD)</span>
             </div>
-            <!-- Acá podés agregar en el futuro más enlaces directos o streams M3U8 -->
           </div>
         </div>
       </div>
@@ -235,16 +234,25 @@
         event.currentTarget.classList.add('active');
       }
 
-      // Reproductor de video directo
+      // Reproductor de video directo con arranque forzado
       function playStream(videoUrl, displayName) {
         let placeholder = document.getElementById('placeholder-text');
         if (placeholder) {
           placeholder.style.display = 'none';
         }
         let player = document.getElementById('videoPlayer');
+        player.pause();
         player.src = videoUrl;
         player.load();
-        player.play().catch(e => console.log("Reproducción automática bloqueada por el navegador:", e));
+        
+        let playPromise = player.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Autoplay bloqueado, habilitando controles manuales.");
+            player.muted = true;
+            player.play();
+          });
+        }
       }
 
       // Lógica de Perfil y LocalStorage
