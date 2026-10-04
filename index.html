@@ -183,14 +183,14 @@
         <h2>Canales Online (Estables)</h2>
         <div class="tv-grid">
           <div class="video-box" id="player-view">
-            <!-- Reproductor HTML5 nativo con controles visibles -->
+            <!-- Reproductor HTML5 nativo con controles -->
             <video id="videoPlayer" controls>
               Tu navegador no soporta la reproducción de video.
             </video>
             <div id="placeholder-text" style="position: absolute; pointer-events: none;">Seleccioná un canal para reproducir</div>
           </div>
           <div class="channels-list" id="channelList">
-            <!-- Canal de prueba seguro HTTPS con video de Wikimedia -->
+            <!-- Canal de prueba seguro -->
             <div class="channel-item" onclick="playStream('https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f1/Sintel_movie_4K.webm/Sintel_movie_4K.webm.480p.webm', 'Sintel HD')">
               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Sintel_movie_4K.webm/snapshot-Sintel_movie_4K.webm-00005.jpg" alt="Sintel" />
               <span>Canal de Prueba (Sintel HD)</span>
@@ -235,18 +235,28 @@
         event.currentTarget.classList.add('active');
       }
 
-      // Reproductor de video directo controlado con HTTPS
+      // Reproductor con manejo seguro de fuente y aviso
       function playStream(videoUrl, displayName) {
         let placeholder = document.getElementById('placeholder-text');
         if (placeholder) {
           placeholder.style.display = 'none';
         }
         let player = document.getElementById('videoPlayer');
+        
+        player.pause();
+        player.removeAttribute('src');
         player.src = videoUrl;
         player.load();
-        player.play().catch(error => {
-          console.log("Reproducción pausada por seguridad del navegador. Usar controles manuales.");
-        });
+        
+        let promise = player.play();
+        if (promise !== undefined) {
+          promise.then(_ => {
+            // Reproducción exitosa
+          }).catch(error => {
+            console.log("Error de reproducción: ", error);
+            alert("Hacé clic en el botón de Play del reproductor para iniciar.");
+          });
+        }
       }
 
       // Lógica de Perfil y LocalStorage
