@@ -190,10 +190,10 @@
             <div id="placeholder-text" style="position: absolute; pointer-events: none;">Seleccioná un canal para reproducir</div>
           </div>
           <div class="channels-list" id="channelList">
-            <!-- Canal de prueba seguro -->
-            <div class="channel-item" onclick="playStream('https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f1/Sintel_movie_4K.webm/Sintel_movie_4K.webm.480p.webm', 'Sintel HD')">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Sintel_movie_4K.webm/snapshot-Sintel_movie_4K.webm-00005.jpg" alt="Sintel" />
-              <span>Canal de Prueba (Sintel HD)</span>
+            <!-- Canal de prueba MP4 directo -->
+            <div class="channel-item" onclick="playStream('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4', 'Tears of Steel HD')">
+              <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=100" alt="Test" />
+              <span>Canal de Prueba (MP4 Directo)</span>
             </div>
           </div>
         </div>
@@ -235,7 +235,7 @@
         event.currentTarget.classList.add('active');
       }
 
-      // Reproductor ajustado para iniciar sin bloqueos
+      // Reproductor limpio para MP4
       function playStream(videoUrl, displayName) {
         let placeholder = document.getElementById('placeholder-text');
         if (placeholder) {
@@ -245,13 +245,13 @@
         
         player.pause();
         player.src = videoUrl;
-        player.muted = true; // Silenciado temporalmente para evitar bloqueo del navegador
+        player.muted = true;
         player.load();
         
         player.play().then(() => {
-          // El video arrancó perfecto, después el usuario puede subir el volumen desde los controles
+          console.log("Reproduciendo con éxito");
         }).catch(error => {
-          console.log("Reproducción manual requerida: ", error);
+          console.log("Requiere interacción manual en controles: ", error);
         });
       }
 
