@@ -235,7 +235,7 @@
         event.currentTarget.classList.add('active');
       }
 
-      // Reproductor con manejo seguro de fuente y aviso
+      // Reproductor ajustado para iniciar sin bloqueos
       function playStream(videoUrl, displayName) {
         let placeholder = document.getElementById('placeholder-text');
         if (placeholder) {
@@ -244,19 +244,15 @@
         let player = document.getElementById('videoPlayer');
         
         player.pause();
-        player.removeAttribute('src');
         player.src = videoUrl;
+        player.muted = true; // Silenciado temporalmente para evitar bloqueo del navegador
         player.load();
         
-        let promise = player.play();
-        if (promise !== undefined) {
-          promise.then(_ => {
-            // Reproducción exitosa
-          }).catch(error => {
-            console.log("Error de reproducción: ", error);
-            alert("Hacé clic en el botón de Play del reproductor para iniciar.");
-          });
-        }
+        player.play().then(() => {
+          // El video arrancó perfecto, después el usuario puede subir el volumen desde los controles
+        }).catch(error => {
+          console.log("Reproducción manual requerida: ", error);
+        });
       }
 
       // Lógica de Perfil y LocalStorage
