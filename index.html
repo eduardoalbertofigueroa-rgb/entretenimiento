@@ -106,7 +106,7 @@
         cursor: pointer;
         object-fit: cover;
       }
-      /* Estilos sección TV/Canales */
+      /* Estilos sección TV/Canales con Iframe */
       .tv-grid {
         display: grid;
         grid-template-columns: 2fr 1fr;
@@ -121,12 +121,13 @@
         justify-content: center;
         border-radius: 8px;
         position: relative;
+        overflow: hidden;
       }
-      #videoPlayer {
+      #videoFrame {
         width: 100%;
         height: 100%;
+        border: none;
         background: #000;
-        object-fit: contain;
       }
       .channels-list {
         background: #12131a;
@@ -174,21 +175,25 @@
         <p>Seleccioná una opción en el menú de la izquierda para ver los canales o editar tu perfil.</p>
       </div>
 
-      <!-- Sección TV / Canales -->
+      <!-- Sección TV / Canales (Iframe) -->
       <div id="tv" class="section">
-        <h2>Canales Online (Estables)</h2>
+        <h2>Canales Online (Embebidos)</h2>
         <div class="tv-grid">
-          <div class="video-box">
-            <!-- El video ya viene precargado en la etiqueta para evitar bloqueos del navegador -->
-            <video id="videoPlayer" controls preload="auto">
-              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
-              Tu navegador no soporta la reproducción de video.
-            </video>
+          <div class="video-box" id="player-view">
+            <!-- Reproductor Iframe por defecto -->
+            <iframe id="videoFrame" src="https://www.youtube.com/embed/jfKfPfyJRdk" allowfullscreen></iframe>
+            <div id="placeholder-text" style="position: absolute; pointer-events: none; display: none;">Seleccioná un canal para reproducir</div>
           </div>
-          <div class="channels-list">
-            <div class="channel-item">
-              <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=100" alt="Test" />
-              <span>Canal Principal (Tears of Steel)</span>
+          <div class="channels-list" id="channelList">
+            <!-- Canal de prueba 1: Lo-Fi Radio en vivo (YouTube Embebido estable) -->
+            <div class="channel-item" onclick="playChannel('https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1')">
+              <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=100" alt="LoFi" />
+              <span>Lo-Fi Radio (En Vivo)</span>
+            </div>
+            <!-- Canal de prueba 2: Video de muestra de YouTube -->
+            <div class="channel-item" onclick="playChannel('https://www.youtube.com/embed/L_LUpnjgPso?autoplay=1')">
+              <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=100" alt="Big Buck Bunny" />
+              <span>Big Buck Bunny (Animación)</span>
             </div>
           </div>
         </div>
@@ -230,6 +235,12 @@
         event.currentTarget.classList.add('active');
       }
 
+      // Función para cambiar el enlace del Iframe al hacer clic en un canal
+      function playChannel(url) {
+        let frame = document.getElementById('videoFrame');
+        frame.src = url;
+      }
+
       // Lógica de Perfil y LocalStorage
       window.onload = function() {
         let saved = localStorage.getItem("userProfile");
@@ -262,7 +273,7 @@
           image: document.getElementById("profileImage").src
         };
         localStorage.setItem("userProfile", JSON.stringify(profile));
-        alert("¡Perfil guardado con éxito!");
+            alert("¡Perfil guardado con éxito!");
       }
     </script>
   </body>
